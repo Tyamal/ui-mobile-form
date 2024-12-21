@@ -1,0 +1,96 @@
+<!-- health-care-form.component.html -->
+<template id="health-care-form-template">
+    <div class="${mainContainerClasses}">
+        <h1 class="text-3xl font-bold mb-4">Health Care Form</h1>
+        <form class="${formContainerClasses}">
+            <form-input label="Full Name" type="text" id="name" name="name" placeholder="Enter your full name" required></form-input>
+            <form-input label="Email Address" type="email" id="email" name="email" placeholder="Enter your email address" required></form-input>
+            <form-input label="Phone Number" type="tel" id="phone" name="phone" placeholder="Enter your phone number" required></form-input>
+            <form-textarea label="Message" id="message" name="message" placeholder="Enter your message" required></form-textarea>
+            <button class="${submitButtonClasses}" type="submit">Submit</button>
+        </form>
+    </div>
+</template>
+
+<!-- form-input.component.html -->
+<template id="form-input-template">
+    <label for="${id}" class="block text-sm font-medium text-primary-foreground">${label}</label>
+    <input type="${type}" id="${id}" name="${name}" placeholder="${placeholder}" class="${inputClasses}" required>
+</template>
+
+<!-- form-textarea.component.html -->
+<template id="form-textarea-template">
+    <label for="${id}" class="block text-sm font-medium text-primary-foreground">${label}</label>
+    <textarea id="${id}" name="${name}" placeholder="${placeholder}" class="${textareaClasses}" required></textarea>
+</template>
+
+<!-- health-care-form.component.js -->
+const mainContainerClasses = "bg-background text-primary-foreground min-h-screen p-4 md:p-8";
+const formContainerClasses = "bg-card p-4 md:p-8 rounded-lg";
+const submitButtonClasses = "bg-primary text-primary-foreground hover:bg-primary/80 rounded-md py-2 px-4";
+
+class HealthCareForm extends HTMLElement {
+    constructor() {
+        super();
+
+        const template = document.getElementById('health-care-form-template').content;
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.appendChild(template.cloneNode(true));
+    }
+}
+
+customElements.define('health-care-form', HealthCareForm);
+
+// form-input.component.js
+const inputClasses = "w-full bg-input text-primary-foreground rounded-md p-2 mb-4";
+const formInputTemplate = document.getElementById('form-input-template').content;
+
+class FormInput extends HTMLElement {
+    constructor() {
+        super();
+
+        const label = this.getAttribute('label');
+        const type = this.getAttribute('type');
+        const id = this.getAttribute('id');
+        const name = this.getAttribute('name');
+        const placeholder = this.getAttribute('placeholder');
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.appendChild(formInputTemplate.cloneNode(true));
+
+        shadowRoot.querySelector('label').textContent = label;
+        shadowRoot.querySelector('input').setAttribute('type', type);
+        shadowRoot.querySelector('input').setAttribute('id', id);
+        shadowRoot.querySelector('input').setAttribute('name', name);
+        shadowRoot.querySelector('input').setAttribute('placeholder', placeholder);
+        shadowRoot.querySelector('input').classList = inputClasses;
+    }
+}
+
+customElements.define('form-input', FormInput);
+
+// form-textarea.component.js
+const textareaClasses = "w-full bg-input text-primary-foreground rounded-md p-2 mb-4 h-24";
+const formTextareaTemplate = document.getElementById('form-textarea-template').content;
+
+class FormTextarea extends HTMLElement {
+    constructor() {
+        super();
+
+        const label = this.getAttribute('label');
+        const id = this.getAttribute('id');
+        const name = this.getAttribute('name');
+        const placeholder = this.getAttribute('placeholder');
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.appendChild(formTextareaTemplate.cloneNode(true));
+
+        shadowRoot.querySelector('label').textContent = label;
+        shadowRoot.querySelector('textarea').setAttribute('id', id);
+        shadowRoot.querySelector('textarea').setAttribute('name', name);
+        shadowRoot.querySelector('textarea').setAttribute('placeholder', placeholder);
+        shadowRoot.querySelector('textarea').classList = textareaClasses;
+    }
+}
+
+customElements.define('form-textarea', FormTextarea);
